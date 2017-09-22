@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Vá seguro!</title>
+	<meta name="viewport" content="initial-scale=1.0">
+	<style>
+		#maps{
+			height: 85%;
+			background: #ccc;
+			border: solid 1px;
+		}
+
+		html, body{
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		.titulo{
+			width: 100%;
+			margin: 0;
+			border: 0;
+			display: inline-block;
+		}
+		.titulo h1{
+			color:rgb(255,200,10);
+			text-align: center;
+			font: 700 70px 'georgia';
+			text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	</style>
+
+	<script src="jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<div class="titulo">
+		<h1>VÁ SEGURO!</h1>
+	</div>
+	<div id="maps"></div>
+	<script type="text/javascript">
+		function initMap(){
+			var luter = {lat:-22.880357, lng:-43.565716};
+			
+			var mapa = new google.maps.Map(document.getElementById('maps'),{
+				center: luter,
+				zoom:8,
+				mapTypeId: 'satellite'
+			});
+
+			$.getJSON("airports.json",function(aeroportos){
+				for(var i=0;i<aeroportos.length;i++){
+					new google.maps.Marker({
+						position:new google.maps.LatLng(aeroportos[i].lat,aeroportos[i].lon),
+						map:mapa,
+						title:aeroportos[i].name,
+						icon:"./imgs/danger.png",
+						animation:google.maps.Animation.DROP
+					});
+				}
+				});
+
+
+			/* INCLUSÃO DE APENAS UM MARCADOR
+			var marcador = new google.maps.Marker({
+				position:luter,
+				map:map
+			});*/
+
+			/* MARCADORES UNIDOS
+			var localidades = [
+				{lat: -22.915811, lng:-43.681538},
+				{lat: -22.880357, lng:-43.565716},
+				{lat: -22.915814, lng:-43.675085},
+				{lat: -23.005562, lng:-43.321867}
+				];
+
+			var marcadores = localidades.map(function(local){
+				return new google.maps.Marker({
+					position:local,
+				})
+			});
+			
+			var clusterMarcadores = new MarkerClusterer(mapa,marcadores,
+				{imagePath:"./imgs/"});
+			*/
+		}
+	
+	</script>
+	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGOFEPDbIwZ54WTDQAG8xuB_GRCwKFC1o&callback=initMap"></script>
+
+</body>
+</html>
